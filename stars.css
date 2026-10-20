@@ -1,0 +1,94 @@
+/* Deep-space background */
+body {
+    background:
+        radial-gradient(
+            ellipse at 65% 75%,
+            rgba(45, 65, 105, 0.18),
+            transparent 65%
+        ),
+        #080d18;
+    position: relative; 
+    min-height: 100vh;
+}
+
+/* Subtle stars */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background-image:
+        radial-gradient(1px 1px at 10% 20%, #ffffff 98%, transparent),
+        radial-gradient(1px 1px at 25% 70%, #ffffff 98%, transparent),
+        radial-gradient(2px 2px at 45% 15%, #c4d8ff 98%, transparent),
+        radial-gradient(1px 1px at 60% 55%, #ffffff 98%, transparent),
+        radial-gradient(1px 1px at 80% 30%, #ffffff 98%, transparent),
+        radial-gradient(2px 2px at 90% 80%, #b0caff 98%, transparent),
+        radial-gradient(1px 1px at 35% 45%, #ffffff 98%, transparent),
+        radial-gradient(1px 1px at 75% 90%, #ffffff 98%, transparent);
+ 
+    background-size: 310px 270px;
+    opacity: 0.5;
+    animation: starlight 12s ease-in-out infinite alternate;
+}
+
+@keyframes starlight {
+    from { opacity: 0.3; }
+    to { opaccity: 0.65; }
+}
+
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Slow galactic drift */
+body::before{
+    animation:
+        galaxyDrift 60s ease-in-out infinite alternate,
+        starlight 12s ease-in-out inifinite alternate;
+}
+
+@keyframes galaxyDrift {
+    from {
+        transform: translate3d(-25px, -15px, 0);
+    }
+    to {
+        transform: translate3d(25px, 15px, 0);
+    }
+}
+
+/* Faint galactic atmosphere */
+body {
+    background:
+        radial-gradient(
+            ellipse at 65% 70%,
+            rgba(95, 65, 155, 0.38),
+            transparent 65%
+        ),
+        radial-gradient(
+            ellipse at 25% 30%,
+            rgba(35, 95, 155, 0.32),
+            transparent 60%
+        ),
+        #080d18;
+}
+
+/* Living galactic atmosphere */
+body {
+    background-size: 130% 130%;
+    animation: nebulaFlow 90s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaFlow {
+    0% {
+        background-position: 0% 20%;
+    }
+    50% {
+        background-position: 100% 80%;
+    }
+    100 {
+        background-postion: 20% 100%;
+    }            

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="stars.css">
+<style>
+.stats strong {
+display:block;
+font-size: 28px;
+font-weight: 400;
+margin-top: 10px;
+color: #d8dce5;
+}
+.stats {
+display: flex;
+gap: 20px;
+}
+.stats p {
+background: #111b2b;
+padding: 20px;
+border: 1px solid #263449;
+border-radius: 8px;
+min-width: 100px;
+}
+h2 {
+font-size: 14px;
+font-weight: 400;
+letter-spacing: 3px;
+color: #a8b8cc;
+margin-top: 40px;
+}
+h1 {
+font-weight: 300;
+letter-spacing: 6px;
+font-size: 32px;
+}
+p {
+color: #8492a6;
+font-size:13px;
+letter-spacing:2px;
+}
+hr {
+border: none;
+height: 1px;
+background:#263449;
+margin-top: 30px;
+}
+body {
+color: #d8dce5;
+font-family: Arial;
+margin: 0;
+padding: 40px;
+}
+/* Dashboard navigation */
+.page-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+  margin-bottom: 35px;
+}
+.nav-btn {
+  background: rgba(17, 27, 43, 0.55);
+  color: #8492a6;
+  border: 1px solid #263449;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  font-size: 11px;
+  transition: all 0.3s ease;
+}
+.nav-btn:hover,
+.nav-btn.active {
+  color: #d8dce5;
+  border-color: #7289a6;
+  background: rgba(40, 58, 82, 0.55); 
+}
+/*Dashboard page visibility*/
+.dashboard-page {
+  display: none;
+}
+.dashboard-page.active {
+  display: block;
+}
+</style>
+</head>
+<body>
+<h1>Control Center</h1>
+<p>Raspberry Pi 5 | Online</p>
+<hr>
+<nav class="page-nav">
+  <button class="nav-btn active" data-page="systems">SYSTEMS</button>
+  <button class="nav-btn" data-page="controls">PC CONTROLS</button>
+  <button class="nav-btn" data-page="astronomy">ASTRONOMY</button>
+  </nav>
+  <section id="systems" class="dashboard-page active">
+<h2>SYSTEM OVERVIEW</h2>
+<div class="stats">
+  <p>CPU<br>
+    <strong id="cpu-temp">--</strong>
+    <span id="cpu-usage">--</span>
+  </p>
+
+  <p>MEMORY<br>
+    <strong id="ram-usage">--</strong>
+    <span id="ram-total">--</span>
+  </p>
+
+  <p>STORAGE<br>
+    <strong id="storage-usage">--</strong>
+    <span id="storage-total">--</span>
+  </p>
+  </div>
+  <h2>GAMING PC</h2>
+
+<div class="stats">
+  <p>CPU<br>
+    <strong id="pc-cpu-temp">--</strong>
+    <span id="pc-cpu-usage">--</span>
+  </p>
+
+  <p>GPU<br>
+    <strong id="pc-gpu-temp">--</strong>
+    <span id="pc-gpu-usage">--</span>
+  </p>
+
+  <p>VRAM<br>
+    <strong id="pc-vram-temp">--</strong>
+  </p>
+</div>
+  </section>
+  <section id="controls" class="dashboard-page">
+    <h2>GAMING PC CONTROLS</h2>
+    <p> Gaming PC intergration coming soon.</p>
+    </section>
+
+    <section id="astronomy" class="dashboard-page">
+      <h2>ASTRONOMY</h2>
+      <p>Your window into the universe.</p>
+      </section>
+<script>
+async function updateStats() {
+    try {
+        const response = await fetch('/stats');
+        if (!response.ok) {
+            throw new Error('Stats request failed');
+        }
+
+        const stats = await response.json();
+
+        document.getElementById('cpu-temp').textContent =
+            stats.cpu_temp.toFixed(1) + '\u00B0C';
+
+        document.getElementById('cpu-usage').textContent =
+            stats.cpu_usage.toFixed(1) + '% usage';
+
+        document.getElementById('ram-usage').textContent =
+            stats.ram_usage.toFixed(1) + '%';
+
+        document.getElementById('ram-total').textContent =
+            stats.ram_total + ' GiB total';
+
+        document.getElementById('storage-usage').textContent =
+            stats.storage_usage.toFixed(1) + '%';
+
+        document.getElementById('storage-total').textContent =
+            stats.storage_total + ' GiB total';
+
+    } catch (error) {
+        console.error('Unable to update stats:', error);
+    }
+}
+
+updateStats();
+setInterval(updateStats, 5000);
+
+async function updatePCStats() {
+  try {
+    const response = await fetch('/pc-stats');
+
+    if (!response.ok) {
+      throw new Error('PC stats request failed');
+    }
+
+    const stats = await response.json();
+
+    document.getElementById('pc-cpu-temp').textContent =
+      stats.cpu_temp ?? '--';
+
+    document.getElementById('pc-cpu-usage').textContent =
+      stats.cpu_usage ?? '--';
+
+    document.getElementById('pc-gpu-temp').textContent =
+      stats.gpu_temp ?? '--';
+
+    document.getElementById('pc-gpu-usage').textContent =
+      stats.gpu_usage ?? '--';
+
+    document.getElementById('pc-vram-temp').textContent =
+      stats.vram_temp ?? '--';
+
+  } catch (error) {
+    console.error('Unable to update PC stats:', error);
+  }
+}
+
+updatePCStats();
+setInterval(updatePCStats, 5000);
+/*Dashboard navigation*/
+const navButtons = document.querySelectorAll('.nav-btn');
+const dashboardPages = document.querySelectorAll('.dashboard-page');
+
+navButtons.forEach(button => {
+    button.addEventListener('click', ()=> {
+        const targetPage = button.dataset.page;
+        
+        navButtons.forEach(btn => {
+          btn.classList.remove('active');
+        }); 
+        
+        dashboardPages.forEach(page => {
+          page.classList.remove('active');
+        });
+        
+        button.classList.add('active');
+        document.getElementById(targetPage).classList.add('active');
+      });
+    });
+
+</script>
+</body>
+</html>														

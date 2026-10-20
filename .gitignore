@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Old dashboard backups
+*.backup*
+*.before-*
+
+# Private configuration
+.env
+.env.*
+*.key
+*.pem
