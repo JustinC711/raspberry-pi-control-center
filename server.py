@@ -45,7 +45,7 @@ def get_pc_stats():
         "gpu_temp": sensors.get("/gpu-nvidia/0/temperature/0"),
         "gpu_usage": sensors.get("/gpu-nvidia/0/load/0"),
         "vram_temp": sensors.get("/gpu-nvidia/0/temperature/3")
-    }   
+    }
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/temp":
@@ -82,6 +82,12 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/css")
             self.end_headers()
             with open("stars.css", "rb") as f:
+                self.wfile.write(f.read())
+        elif self.path == "/space.js":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/javascript")
+            self.end_headers()
+            with open("space.js", "rb") as f:
                 self.wfile.write(f.read())
         else:
             self.send_response(200)
