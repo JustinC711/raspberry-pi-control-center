@@ -22,8 +22,7 @@ This is an ongoing personal project focused on learning Linux, Python, networkin
 ## Hardware
 
 - Raspberry Pi 5
-- MicroSD card running Raspberry Pi OS
-- NVMe SSD for additional storage
+- NVMe SSD for additional storage and running Raspberry Pi OS
 - Windows gaming PC
 - Ethernet network connection
 
