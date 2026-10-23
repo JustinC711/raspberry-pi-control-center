@@ -65,18 +65,23 @@ class Handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"error": str(error)}).encode())
         elif self.path == "/stats":
-                stats = {
+            with open("/proc/uptime", "r") as f:
+                uptime_seconds = int(float(f.read().split()[0]))
+
+            stats = {
                 "cpu_usage": psutil.cpu_percent(interval=0.1),
                 "cpu_temp": cpu_temp(),
-                "ram_usage": psutil.virtual_memory() .percent,
+                "ram_usage": psutil.virtual_memory().percent,
                 "ram_total": round(psutil.virtual_memory().total / (1024**3), 1),
                 "storage_usage": psutil.disk_usage("/").percent,
-                "storage_total": round(psutil.disk_usage("/").total / (1024**3), 1)
-                }
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json")
-                self.end_headers()
-                self.wfile.write(json.dumps(stats).encode())
+                "storage_total": round(psutil.disk_usage("/").total / (1024**3), 1),
+                "uptime": uptime_seconds
+            }
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps(stats).encode())
         elif self.path == "/stars.css":
             self.send_response(200)
             self.send_header("Content-Type", "text/css")
@@ -89,6 +94,13 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             with open("space.js", "rb") as f:
                 self.wfile.write(f.read())
+       
+        elif self.path == "/assets/backgrounds/home.png":
+             self.send_response(200)
+             self.send_header("Content-Type", "image/png")
+             self.end_headers()
+             with open("assets/backgrounds/home.png", "rb") as f:
+               self.wfile.write(f.read())        
         else:
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
