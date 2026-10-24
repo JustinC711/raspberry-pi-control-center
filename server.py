@@ -4,6 +4,7 @@ import os
 import psutil
 import urllib.request
 import base64
+import time
 
 from pathlib import Path
 
@@ -29,6 +30,16 @@ load_env()
 def cpu_temp():
      with open("/sys/class/thermal/thermal_zone0/temp") as f:
         return int(f.read()) / 1000
+
+def get_uptime():
+    seconds = int(time.time() - psutil.boot_time())
+
+    days, remainder = divmod(seconds, 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes = remainder // 60
+
+    return f"{days}d {hours}h {minutes}m" 
+
 def get_pc_stats():
     url = os.environ["PC_MONITOR_URL"]
 
@@ -86,8 +97,6 @@ class Handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"error": str(error)}).encode())
         elif self.path == "/stats":
-            with open("/proc/uptime", "r") as f:
-                uptime_seconds = int(float(f.read().split()[0]))
 
             stats = {
                 "cpu_usage": psutil.cpu_percent(interval=0.1),
@@ -96,7 +105,7 @@ class Handler(BaseHTTPRequestHandler):
                 "ram_total": round(psutil.virtual_memory().total / (1024**3), 1),
                 "storage_usage": psutil.disk_usage("/").percent,
                 "storage_total": round(psutil.disk_usage("/").total / (1024**3), 1),
-                "uptime": uptime_seconds
+                "uptime": get_uptime()
             }
 
             self.send_response(200)

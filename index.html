@@ -17,6 +17,10 @@
     min-width: 0;
 }
 
+.system-panel + .system-panel {
+    margin-left: 24px;
+}
+
 .system-panel .stats {
     gap: 12px;
 }
@@ -28,25 +32,25 @@
 
 .stats strong {
 display:block;
-font-size: 28px;
+font-size: 23px;
 font-weight: 400;
 margin-top: 10px;
 color: #eef6ff;
 }
 .stats {
 display: flex;
-gap: 20px;
+gap: 14px;
 }
 .stats span {
   color: #b7cae3;
   font-size: 13px;
 }
 .stats p {
- background: rgba(8, 15, 30, 0.22);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+ background: rgba(8, 15, 30, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     padding: 14px;
-    border: 1px solid rgba(150, 190, 230, 0.18);
+    border: 1px solid rgba(150, 190, 230, 0.22);
     border-radius: 8px;
     min-width: 0;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
@@ -193,7 +197,7 @@ body {
 
     <div class="info-block">
       <span class="info-label">UPTIME</span>
-      <strong>--</strong>
+      <strong id="uptime">--</strong>
       <span>System uptime</span>
     </div>
 
@@ -290,6 +294,8 @@ async function updateStats() {
 
         document.getElementById('storage-total').textContent =
             stats.storage_total + ' GiB total';
+        document.getElementById('uptime').textContent =
+    stats.uptime ?? '--';    
 
     } catch (error) {
         console.error('Unable to update stats:', error);
@@ -309,20 +315,40 @@ async function updatePCStats() {
 
     const stats = await response.json();
 
+    function formatTemp(value) {
+      if (value == null || value === '') return '--';
+
+      const number = parseFloat(value);
+
+      return Number.isFinite(number)
+        ? `${number.toFixed(1)}°C`
+        : '--';
+    }
+
+    function formatUsage(value) {
+      if (value == null || value === '') return '--';
+
+      const number = parseFloat(value);
+
+      return Number.isFinite(number)
+        ? `${number.toFixed(1)}% usage`
+        : '--';
+    }
+
     document.getElementById('pc-cpu-temp').textContent =
-      stats.cpu_temp ?? '--';
+      formatTemp(stats.cpu_temp);
 
     document.getElementById('pc-cpu-usage').textContent =
-      stats.cpu_usage ?? '--';
+      formatUsage(stats.cpu_usage);
 
     document.getElementById('pc-gpu-temp').textContent =
-      stats.gpu_temp ?? '--';
+      formatTemp(stats.gpu_temp);
 
     document.getElementById('pc-gpu-usage').textContent =
-      stats.gpu_usage ?? '--';
+      formatUsage(stats.gpu_usage);
 
     document.getElementById('pc-vram-temp').textContent =
-      stats.vram_temp ?? '--';
+      formatTemp(stats.vram_temp);
 
   } catch (error) {
     console.error('Unable to update PC stats:', error);
