@@ -5,6 +5,11 @@ import psutil
 import urllib.request
 import base64
 import time
+from skyfield.api import load
+from skyfield import almanac
+
+ts = load.timescale()
+planets = load("de421.bsp")
 
 from pathlib import Path
 
@@ -39,6 +44,36 @@ def get_uptime():
     minutes = remainder // 60
 
     return f"{days}d {hours}h {minutes}m" 
+
+def get_moon_data():
+    now = ts.now()
+
+    phase_angle = almanac.moon_phase(planets, now).degrees
+    illumination = almanac.fraction_illuminated(
+        planets, "moon", now
+    ) * 100
+
+    if phase_angle < 22.5 or phase_angle >= 337.5:
+        phase_name = "New Moon"
+    elif phase_angle < 67.5:
+        phase_name = "Waxing Crescent"
+    elif phase_angle < 112.5:
+        phase_name = "First Quarter"
+    elif phase_angle < 157.5:
+        phase_name = "Waxing Gibbous"
+    elif phase_angle < 202.5:
+        phase_name = "Full Moon"
+    elif phase_angle < 247.5:
+        phase_name = "Waning Gibbous"
+    elif phase_angle < 292.5:
+        phase_name = "Last Quarter"
+    else:
+        phase_name = "Waning Crescent"
+
+    return {
+        "phase": phase_name,
+        "illumination": round(illumination, 1)
+    }
 
 def get_pc_stats():
     url = os.environ["PC_MONITOR_URL"]
@@ -105,7 +140,8 @@ class Handler(BaseHTTPRequestHandler):
                 "ram_total": round(psutil.virtual_memory().total / (1024**3), 1),
                 "storage_usage": psutil.disk_usage("/").percent,
                 "storage_total": round(psutil.disk_usage("/").total / (1024**3), 1),
-                "uptime": get_uptime()
+                "uptime": get_uptime(),
+                "moon": get_moon_data()
             }
 
             self.send_response(200)

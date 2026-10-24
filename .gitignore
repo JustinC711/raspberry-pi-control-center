@@ -11,3 +11,9 @@ __pycache__/
 .env.*
 *.key
 *.pem
+
+# Python virtual enviroment
+.venv/
+
+# Astronomy data
+de421.bsp
