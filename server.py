@@ -5,6 +5,27 @@ import psutil
 import urllib.request
 import base64
 
+from pathlib import Path
+
+def load_env():
+    env_path = Path(__file__).resolve().parent / ".env"
+
+    if not env_path.is_file():
+        raise FileNotFoundError("Missing .env file")
+
+    for line in env_path.read_text().splitlines():
+        line = line.strip()
+
+        if not line or line.startswith("#"):
+            continue
+
+        key, separator, value = line.partition("=")
+
+        if separator:
+            os.environ[key.strip()] = value.strip().strip('"').strip("'")
+
+load_env()
+
 def cpu_temp():
      with open("/sys/class/thermal/thermal_zone0/temp") as f:
         return int(f.read()) / 1000
