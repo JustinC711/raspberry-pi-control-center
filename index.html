@@ -83,6 +83,34 @@ font-family: Arial;
 margin: 0;
 padding: 40px;
 }
+
+.moon-display {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.moon-visual {
+    font-size: 46px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.moon-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.moon-details strong {
+    font-size: 24px;
+}
+
+.moon-details span {
+    font-size: 13px;
+    opacity: 0.8;
+}
 /* Dashboard navigation */
 .page-nav {
   display: flex;
@@ -183,11 +211,18 @@ body {
 
   <div class="home-side-info">
 
-   <div class="info-block">
+  <div class="info-block">
     <span class="info-label">MOON</span>
-    <strong id="moon-phase">--</strong>
-    <span id="moon-illumination">--% illuminated</span>
-</div> 
+
+    <div class="moon-display">
+        <div id="moon-visual" class="moon-visual">🌕</div>
+
+        <div class="moon-details">
+            <strong id="moon-phase">--</strong>
+            <span id="moon-illumination">--% illuminated</span>
+        </div>
+    </div>
+</div>
 
     <div class="info-block">
       <span class="info-label">NETWORK</span>
@@ -303,6 +338,19 @@ async function updateStats() {
 
         document.getElementById("moon-illumination").textContent =
             `${stats.moon.illumination}% illuminated`;
+        const moonIcons = {
+    "New Moon": "🌑",
+    "Waxing Crescent": "🌒",
+    "First Quarter": "🌓",
+    "Waxing Gibbous": "🌔",
+    "Full Moon": "🌕",
+    "Waning Gibbous": "🌖",
+    "Last Quarter": "🌗",
+    "Waning Crescent": "🌘"
+};
+
+document.getElementById("moon-visual").textContent =
+    moonIcons[stats.moon.phase] ?? "🌙";    
 
     } catch (error) {
         console.error('Unable to update stats:', error);

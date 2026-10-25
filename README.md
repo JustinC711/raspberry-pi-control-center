@@ -2,7 +2,7 @@
 
 ## Dashboard Preview 
 
-![Raspberry Pi 5 Control Center Dashboard](screenshots/dashboard.jpeg)
+![Raspberry Pi 5 Control Center Dashboard](screenshots/home-dashboard-oct24.jpeg)
 ## Project Overview
 
 A custom Raspberry Pi 5 dashboard designed to monitor system performance, display live telemetry from a Windows gaming PC, and eventually serve as a touchscreen control center for my home network.
