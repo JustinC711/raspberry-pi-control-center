@@ -126,11 +126,15 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
                 self.wfile.write(json.dumps(pc_stats).encode())
-            except Exception as error:
+            except Exception:
                 self.send_response(503)
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
-                self.wfile.write(json.dumps({"error": str(error)}).encode())
+                self.wfile.write(
+                    json.dumps({
+                        "error": "PC telemetry temporarily unavailable"
+                    }).encode()
+                )
         elif self.path == "/stats":
 
             stats = {
