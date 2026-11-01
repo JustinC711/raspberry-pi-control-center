@@ -17,7 +17,7 @@ def load_env():
     env_path = Path(__file__).resolve().parent / ".env"
 
     if not env_path.is_file():
-        raise FileNotFoundError("Missing .env file")
+        return
 
     for line in env_path.read_text().splitlines():
         line = line.strip()
@@ -43,7 +43,7 @@ def get_uptime():
     hours, remainder = divmod(remainder, 3600)
     minutes = remainder // 60
 
-    return f"{days}d {hours}h {minutes}m" 
+    return f"{days}d {hours}h {minutes}m"
 
 def get_moon_data():
     now = ts.now()
@@ -76,10 +76,12 @@ def get_moon_data():
     }
 
 def get_pc_stats():
-    url = os.environ["PC_MONITOR_URL"]
-
+    url = os.environ.get("PC_MONITOR_URL")
     username = "pi-monitor"
-    password = os.environ["PC_MONITOR_PASSWORD"]
+    password = os.environ.get("PC_MONITOR_PASSWORD")
+
+    if not url or not password:
+        raise ValueError("PC telemetry is not configured")
 
     credentials = base64.b64encode(
         f"{username}:{password}".encode()
@@ -164,13 +166,13 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             with open("space.js", "rb") as f:
                 self.wfile.write(f.read())
-       
+
         elif self.path == "/assets/backgrounds/home.png":
              self.send_response(200)
              self.send_header("Content-Type", "image/png")
              self.end_headers()
              with open("assets/backgrounds/home.png", "rb") as f:
-               self.wfile.write(f.read())        
+               self.wfile.write(f.read())
         else:
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
