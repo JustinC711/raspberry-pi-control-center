@@ -1,68 +1,139 @@
+
 # Raspberry Pi 5 Control Center
 
-## Dashboard Preview 
+A custom-built Raspberry Pi 5 dashboard combining real-time system monitoring, Windows gaming PC telemetry, and an astronomy-inspired touchscreen interface.
 
-![Raspberry Pi 5 Control Center Dashboard](screenshots/home-dashboard-oct24.jpeg)
+## Dashboard Preview
+
+![Raspberry Pi 5 Control Center Dashboard](screenshots/dashboard-home-oct24.png)
+
 ## Project Overview
 
-A custom Raspberry Pi 5 dashboard designed to monitor system performance, display live telemetry from a Windows gaming PC, and eventually serve as a touchscreen control center for my home network.
+The goal of this project is to transform a Raspberry Pi 5 into a dedicated touchscreen control center for monitoring computers, managing devices, and eventually overseeing a home network and homelab.
 
-This is an ongoing personal project focused on learning Linux, Python, networking, remote system administration, and Git.
+This project is also a hands-on learning experience focused on Linux, Python, networking, web development, troubleshooting, and Git.
 
 ## Current Features
 
 - Live Raspberry Pi CPU temperature and usage monitoring
-- Raspberry Pi memory and storage statistics
-- Windows gaming PC CPU and GPU telemetry integration
-- Custom HTML, CSS, and JavaScript dashboard
-- Astronomy-inspired starfield interface
-- Multiple dashboard pages for future expansion
-- Remote development using SSH and Visual Studio Code
+- Raspberry Pi memory, storage, and uptime statistics
+- Windows gaming PC CPU and GPU telemetry using LibreHardwareMonitor
+- Moon phase and illumination information
+- Custom astronomy-inspired interface with animated stars
+- Navigation sections for Home, PC Controls, Astronomy, and Homelab
+- Touchscreen-oriented ultrawide layout
+- Environment-based configuration for Windows telemetry credentials
 
 ## Hardware
 
-- Raspberry Pi 5
-- NVMe SSD for additional storage and running Raspberry Pi OS
+- Raspberry Pi 5 (8 GB RAM)
+- NVMe SSD running Raspberry Pi OS
+- 12.3-inch ultrawide touchscreen (2560 × 720)
 - Windows gaming PC
-- Ethernet network connection
+- Local home network
 
-## Technologies Used
+## Technology Stack
 
-- **Linux / Raspberry Pi OS** — Operating system and server environment
-- **Python** — Backend server and system monitoring
-- **HTML** — Dashboard structure
-- **CSS** — Visual styling and starfield design
-- **JavaScript** — Live data updates and dashboard navigation
-- **SSH** — Remote access and administration
-- **Git** — Version control
-- **GitHub** — Project hosting and documentation (publication in progress)
+| Technology | Purpose |
+|---|---|
+| Python | Backend HTTP server and system monitoring |
+| psutil | Raspberry Pi system statistics |
+| Skyfield | Astronomy calculations |
+| HTML | Dashboard structure |
+| CSS | Interface styling |
+| JavaScript | Live data updates and navigation |
+| LibreHardwareMonitor | Windows PC hardware telemetry |
+| SSH | Remote Linux administration |
+| Git & GitHub | Version control and documentation |
+| Raspberry Pi OS | Linux operating environment |
+
+## Architecture
+
+The Raspberry Pi hosts the dashboard and collects its own system statistics locally.
+
+A Python backend retrieves Windows gaming PC telemetry from LibreHardwareMonitor over the local network and provides selected statistics to the dashboard frontend.
+
+JavaScript requests updated information from the backend and displays it in the custom interface.
+
+## Installation & Setup
+
+### Requirements
+
+- Raspberry Pi running Raspberry Pi OS
+- Python 3.13 and pip
+- Git
+- Optional: Windows gaming PC running LibreHardwareMonitor
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/JustinC711/raspberry-pi-control-center.git
+cd raspberry-pi-control-center
+```
+
+### 2. Create a Virtual Environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 4. Configure Windows Telemetry (Optional)
+
+The backend uses these environment variables:
+
+```env
+PC_MONITOR_URL=http://YOUR_PC_IP:8085
+PC_MONITOR_PASSWORD=YOUR_PASSWORD
+```
+
+Store configuration in a local `.env` file and never commit credentials to GitHub.
+
+Windows telemetry requires LibreHardwareMonitor's HTTP server and appropriate local firewall permissions.
+
+### 5. Start the Dashboard
+
+```bash
+python server.py
+```
+
+Open the dashboard locally on the Raspberry Pi:
+
+```text
+http://127.0.0.1:8000
+```
+
+**Note:** The astronomy feature may require a local `de421.bsp` ephemeris file, which is not included in this repository. Setup instructions for this data file are still being finalized.
 
 ## Security Considerations
 
-- The Python dashboard server listens on the Raspberry Pi's localhost interface.
-- The Windows telemetry password is read from an environment variable rather than hardcoded into the Python source.
-- A `.gitignore` file excludes common secret files, temporary files, and manual backups.
-
-### Planned Security Improvements
-
-- Move the Windows telemetry server address into local configuration.
-- Improve encryption and authentication for communication between the Raspberry Pi and Windows PC.
-- Review network exposure and access controls.
-- Add automated secret scanning before publishing future changes.
+- The dashboard server binds to `127.0.0.1` by default.
+- Windows telemetry credentials are loaded from local configuration rather than hardcoded into source files.
+- `.gitignore` excludes sensitive configuration, virtual environments, and backup files.
+- SSH key authentication and firewall rules restrict remote access.
+- Git history has been scanned for accidentally committed secrets.
+- The dashboard is intended for local use, not direct public internet exposure.
 
 ## Planned Features
 
-- Touchscreen-friendly controls for the Windows gaming PC
-- Dedicated astronomy dashboard with space imagery
+- Interactive Windows PC controls
+- Expanded astronomy dashboard
 - Homelab and network monitoring
-- Additional system performance information
+- Touchscreen navigation improvements
 - Ambient display mode
-- Improved dashboard navigation and customization
+- Improved telemetry reliability and configuration documentation
+- Encrypted communication between devices
 
 ## Project Status
 
 **Active Development**
 
-This project is being developed as a hands-on learning experience while working toward a career in information technology. Development includes AI-assisted guidance, independent troubleshooting, and learning the underlying technologies.
+This project is being developed as a hands-on learning experience while preparing for a career in information technology.
 
-Future updates and improvements will be documented through Git.
+Development includes AI-assisted guidance, hands-on implementation, independent troubleshooting, and learning the underlying technologies.
