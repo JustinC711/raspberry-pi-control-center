@@ -193,6 +193,33 @@ body {
     letter-spacing: 1px;
     color: #aebed1;
 }
+/* Live network monitoring */
+.network-speeds {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.network-speeds > div {
+    min-width: 0;
+}
+
+.network-speeds span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #8fa9c7;
+    margin-bottom: 6px;
+}
+
+.network-speeds strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 400;
+    color: #eef6ff;
+    white-space: nowrap;
+}
 </style>
 </head>
 <body>
@@ -224,11 +251,22 @@ body {
     </div>
 </div>
 
-    <div class="info-block">
-      <span class="info-label">NETWORK</span>
-      <strong>ONLINE</strong>
-      <span>Raspberry Pi connected</span>
+<div class="info-block">
+    <span class="info-label">NETWORK · PI 5</span>
+    <strong id="network-status">CONNECTING</strong>
+
+    <div class="network-speeds">
+        <div>
+            <span>↓ DOWNLOAD</span>
+            <strong id="network-download">-- Mbps</strong>
+        </div>
+
+        <div>
+            <span>↑ UPLOAD</span>
+            <strong id="network-upload">-- Mbps</strong>
+        </div>
     </div>
+</div>
 
     <div class="info-block">
       <span class="info-label">UPTIME</span>
@@ -359,6 +397,57 @@ document.getElementById("moon-visual").textContent =
 
 updateStats();
 setInterval(updateStats, 5000);
+
+async function updateNetwork() {
+    try {
+        const response = await fetch('/network', {
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error('Network request failed');
+        }
+
+        const network = await response.json();
+
+        const status = document.getElementById('network-status');
+        const download = document.getElementById('network-download');
+        const upload = document.getElementById('network-upload');
+
+        if (network.status === 'active') {
+            status.textContent = 'MONITORING';
+
+            download.textContent =
+                network.download_mbps.toFixed(2) + ' Mbps';
+
+            upload.textContent =
+                network.upload_mbps.toFixed(2) + ' Mbps';
+        } else {
+            status.textContent =
+                network.status === 'initializing'
+                    ? 'INITIALIZING'
+                    : 'UNAVAILABLE';
+
+            download.textContent = '-- Mbps';
+            upload.textContent = '-- Mbps';
+        }
+
+    } catch (error) {
+        console.error('Network monitoring error:', error);
+
+        document.getElementById('network-status').textContent =
+            'UNAVAILABLE';
+
+        document.getElementById('network-download').textContent =
+            '-- Mbps';
+
+        document.getElementById('network-upload').textContent =
+            '-- Mbps';
+    }
+}
+
+updateNetwork();
+setInterval(updateNetwork, 5000);
 
 async function updatePCStats() {
   try {

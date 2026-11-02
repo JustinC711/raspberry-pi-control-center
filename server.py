@@ -5,6 +5,7 @@ import psutil
 import urllib.request
 import base64
 import time
+import threading
 from skyfield.api import load
 from skyfield import almanac
 
@@ -115,6 +116,57 @@ def get_pc_stats():
         "gpu_usage": sensors.get("/gpu-nvidia/0/load/0"),
         "vram_temp": sensors.get("/gpu-nvidia/0/temperature/3")
     }
+
+network_previous = {}
+network_lock = threading.Lock()
+
+
+def get_network_stats():
+    global network_previous
+
+    with network_lock:
+        counters = psutil.net_io_counters(pernic=True).get("eth0")
+        now = time.monotonic()
+
+        if counters is None:
+            return {
+                "status": "unavailable",
+                "download_mbps": 0,
+                "upload_mbps": 0
+            }
+
+        previous = network_previous
+        network_previous = {
+            "received": counters.bytes_recv,
+            "sent": counters.bytes_sent,
+            "time": now
+        }
+
+        if not previous:
+            return {
+                "status": "initializing",
+                "download_mbps": 0,
+                "upload_mbps": 0
+            }
+
+        elapsed = now - previous["time"]
+
+        if elapsed <= 0:
+            return {
+                "status": "initializing",
+                "download_mbps": 0,
+                "upload_mbps": 0
+            }
+
+        received = max(0, counters.bytes_recv - previous["received"])
+        sent = max(0, counters.bytes_sent - previous["sent"])
+
+        return {
+            "status": "active",
+            "download_mbps": round(received * 8 / elapsed / 1_000_000, 2),
+            "upload_mbps": round(sent * 8 / elapsed / 1_000_000, 2)
+        }
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/temp":
@@ -137,6 +189,18 @@ class Handler(BaseHTTPRequestHandler):
                         "error": "PC telemetry temporarily unavailable"
                     }).encode()
                 )
+        elif self.path == "/network":
+            network_stats = get_network_stats()
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+
+            self.wfile.write(
+                json.dumps(network_stats).encode()
+            )
+
         elif self.path == "/stats":
 
             stats = {
