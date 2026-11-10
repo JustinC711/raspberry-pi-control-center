@@ -5,7 +5,7 @@ A custom-built Raspberry Pi 5 dashboard combining real-time system monitoring, W
 
 ## Dashboard Preview
 
-![Raspberry Pi 5 Control Center Dashboard](screenshots/dashboard-home-oct24.png)
+![Raspberry Pi 5 Control Center Dashboard](screenshots/dashboard-home-nov9.png)
 
 ## Project Overview
 

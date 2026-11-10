@@ -4,234 +4,290 @@
 <link rel="stylesheet" href="stars.css">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
- .system-grid {
-    display: grid;
-    grid-template-columns: 360px 360px;
-    gap: 24px;
-    width: max-content;
-    max-width: 100%;
-    align-items: start;
-}
-
-.system-panel {
-    min-width: 0;
-}
-
-.system-panel + .system-panel {
-    margin-left: 24px;
-}
-
-.system-panel .stats {
-    gap: 12px;
-}
-
-.system-panel .stats p {
-    flex: 1;
-    min-width: 0;
-}
-
-.stats strong {
-display:block;
-font-size: 23px;
-font-weight: 400;
-margin-top: 10px;
-color: #eef6ff;
-}
-.stats {
-display: flex;
-gap: 14px;
-}
-.stats span {
-  color: #b7cae3;
-  font-size: 13px;
-}
-.stats p {
- background: rgba(8, 15, 30, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    padding: 14px;
-    border: 1px solid rgba(150, 190, 230, 0.22);
-    border-radius: 8px;
-    min-width: 0;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
-}
-h2 {
-font-size: 14px;
-font-weight: 500;
-letter-spacing: 3px;
-color: #b8cce6
-}
-h1 {
-font-weight: 300;
-letter-spacing: 6px;
-font-size: 32px;
-}
-p {
-color: #8492a6;
-font-size:13px;
-letter-spacing:2px;
-}
-hr {
-border: none;
-height: 1px;
-background:#263449;
-margin-top: 30px;
-}
+/* Page and background */
 body {
-color: #d8dce5;
-font-family: Arial;
-margin: 0;
-padding: 40px;
+  margin: 0;
+  padding: 40px;
+  color: #d8dce5;
+  font-family: Arial, sans-serif;
+    background-image:
+    linear-gradient(
+      to right,
+      rgba(2, 8, 18, 0.30),
+      rgba(2, 8, 18, 0.12) 55%,
+      rgba(2, 8, 18, 0.05)
+    ),
+    url("assets/backgrounds/home.png");
+  background-size: 100% auto;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-.moon-display {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 10px;
+/* Page-specific space backgrounds */
+body.page-systems {
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(2, 8, 18, 0.30),
+      rgba(2, 8, 18, 0.12) 55%,
+      rgba(2, 8, 18, 0.05)
+    ),
+    url("assets/backgrounds/joshua-webb-GHHuZdfQoUo-unsplash.jpg");
 }
 
-.moon-visual {
-    font-size: 46px;
-    line-height: 1;
-    flex-shrink: 0;
+body.page-controls {
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(2, 8, 18, 0.30),
+      rgba(2, 8, 18, 0.12) 55%,
+      rgba(2, 8, 18, 0.05)
+    ),
+    url("assets/backgrounds/parrish-freeman-eC_Wd8SNAMY-unsplash.jpg");
 }
 
-.moon-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+body.page-homelab {
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(2, 8, 18, 0.30),
+      rgba(2, 8, 18, 0.12) 55%,
+      rgba(2, 8, 18, 0.05)
+    ),
+    url("assets/backgrounds/bernd-dittrich-nXTLdGdoItM-unsplash.jpg");
 }
 
-.moon-details strong {
-    font-size: 24px;
+h1 {
+  margin: 0 0 8px;
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
 }
 
-.moon-details span {
-    font-size: 13px;
-    opacity: 0.8;
+h2 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #eef6ff;
 }
-/* Dashboard navigation */
+
+p {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #aebed1;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  margin-top: 30px;
+  background: #263449;
+}
+
+/* Navigation */
 .page-nav {
   display: flex;
   gap: 12px;
-  margin-top: 30px;
-  margin-bottom: 35px;
+  margin-top: 16px;
+  margin-bottom: 24px;
 }
+
 .nav-btn {
-  background: rgba(10, 18, 34, 0.22);
-  color: #9bbbe0;
-  border: 1px solid rgba(114, 137, 166, 0.25);
+  padding: 12px 20px;
+  border: 1px solid rgba(150, 190, 230, 0.3);
   border-radius: 8px;
-  padding: 10px 18px;
-  cursor: pointer;
+  background: rgba(8, 15, 30, 0.65);
+  color: #d1deef;
+  font-size: 14px;
   letter-spacing: 2px;
-  font-size: 11px;
-  transition: all 0.3s ease;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
+
 .nav-btn:hover,
 .nav-btn.active {
-  color: #e3f0ff;
-  border-color: rgba(140, 180, 220, 0.45);
-  background: rgba(34, 54, 82, 0.28); 
+  color: #ffffff;
+  border-color: rgba(160, 200, 240, 0.6);
+  background: rgba(34, 54, 82, 0.85);
 }
-/*Dashboard page visibility*/
+
 .dashboard-page {
   display: none;
 }
+
 .dashboard-page.active {
   display: block;
 }
-body {
-    background-image: url("assets/backgrounds/home.png");
-    background-size: 100% auto !important;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+
+/* Home telemetry: two open rows */
+.system-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  width: min(1000px, calc(100% - 340px));
+  align-items: start;
 }
 
-/* Home right-side info */
-.home-side-info {
-    position: fixed;
-    right: 40px;
-    top: 165px;
-    width: 240px;
+.system-panel {
+  min-width: 0;
+   width: min(100%, 700px);
+  background: linear-gradient(
+    to right,
+    rgba(3, 10, 22, 0.82),
+    rgba(3, 10, 22, 0.60) 75%,
+    transparent
+  );
+}
 
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.system-panel h2 {
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(150, 190, 230, 0.25);
+  color: #e6edf7;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 3px;
+}
+
+/* Individual readings */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.stats p {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: #b6c5d9;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 6px #020813;
+}
+
+.stats strong {
+  display: block;
+  margin-top: 10px;
+  color: #d9edff;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats span {
+  display: block;
+  margin-top: 6px;
+  color: #c0cee0;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* Home information column */
+.home-side-info {
+  position: fixed;
+  right: 40px;
+  top: 165px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .info-block {
-    background: rgba(8, 15, 30, 0.18);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-
-    border: 1px solid rgba(150, 190, 230, 0.16);
-    border-radius: 8px;
-    padding: 16px 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(150, 190, 230, 0.3);
+  border-radius: 8px;
+  background: rgba(5, 12, 24, 0.8);
 }
 
 .info-label {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: #8fa9c7;
-    margin-bottom: 8px;
+  display: block;
+  margin-bottom: 8px;
+  color: #c1d3eb;
+  font-size: 12px;
+  letter-spacing: 2px;
 }
 
 .info-block strong {
-    display: block;
-    font-size: 22px;
-    font-weight: 400;
-    color: #eef6ff;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 500;
 }
 
 .info-block span:last-child {
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: #aebed1;
+  color: #d1deef;
+  font-size: 14px;
+  letter-spacing: 0;
 }
-/* Live network monitoring */
+
+/* Moon */
+.moon-display {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.moon-visual {
+  flex-shrink: 0;
+  font-size: 46px;
+  line-height: 1;
+}
+
+.moon-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Live network speeds */
 .network-speeds {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
 }
 
 .network-speeds > div {
-    min-width: 0;
+  min-width: 0;
 }
 
 .network-speeds span {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: #8fa9c7;
-    margin-bottom: 6px;
+  display: block;
+  margin-bottom: 6px;
+  color: #c1d3eb;
+  font-size: 12px;
+  letter-spacing: 0;
 }
 
 .network-speeds strong {
-    display: block;
-    font-size: 17px;
-    font-weight: 400;
-    color: #eef6ff;
-    white-space: nowrap;
+  font-size: 20px;
+  white-space: nowrap;
 }
 </style>
 </head>
 <body>
 <canvas id="space-canvas"></canvas>
-<h1>Control Center</h1>
-<p>Raspberry Pi 5 | Online</p>
+<h1 id="dashboard-clock">--:--</h1>
+<p id="dashboard-date">---</p>
 <hr>
 <nav class="page-nav">
   <button class="nav-btn active" data-page="systems">HOME</button>
   <button class="nav-btn" data-page="controls">PC CONTROLS</button>
-  <button class="nav-btn" data-page="astronomy">ASTRONOMY</button>
-   <button class="nav-btn" data-page="homelab">HOMELAB</button>
+  <button class="nav-btn" data-page="homelab">HOMELAB</button>
   </nav>
   <section id="systems" class="dashboard-page active">
 <div class="system-grid">
@@ -318,7 +374,8 @@ body {
 
       <p>
         VRAM<br>
-        <strong id="pc-vram-temp">--</strong>
+        <strong id="pc-vram-used">--</strong>
+        <span id="pc-vram-total">--</span>
       </p>
     </div>
   </div>
@@ -330,11 +387,6 @@ body {
     <h2>GAMING PC CONTROLS</h2>
     <p> Gaming PC intergration coming soon.</p>
     </section>
-
-    <section id="astronomy" class="dashboard-page">
-      <h2>ASTRONOMY</h2>
-      <p>Your window into the universe.</p>
-      </section>
 
     <section id="homelab" class="dashboard-page">
       <h2>HOMELAB</h2>
@@ -394,6 +446,26 @@ document.getElementById("moon-visual").textContent =
         console.error('Unable to update stats:', error);
     }
 }
+
+function updateClock() {
+  const now = new Date();
+
+  document.getElementById('dashboard-clock').textContent =
+    now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+
+  document.getElementById('dashboard-date').textContent =
+    now.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    });
+}
+
+updateClock();
+setInterval(updateClock, 1000);
 
 updateStats();
 setInterval(updateStats, 5000);
@@ -491,11 +563,39 @@ async function updatePCStats() {
     document.getElementById('pc-gpu-usage').textContent =
       formatUsage(stats.gpu_usage);
 
-    document.getElementById('pc-vram-temp').textContent =
-      formatTemp(stats.vram_temp);
+      function memoryGiB(value) {
+      const number = parseFloat(
+        String(value ?? '').replaceAll(',', '')
+      );
+
+      return Number.isFinite(number)
+        ? (number / 1024).toFixed(1) + ' GiB'
+        : '—';
+    }
+
+    document.getElementById('pc-vram-used').textContent =
+      memoryGiB(stats.vram_used);
+
+    const total = memoryGiB(stats.vram_total);
+
+    document.getElementById('pc-vram-total').textContent =
+      total === '—' ? '—' : 'of ' + total;
 
   } catch (error) {
     console.error('Unable to update PC stats:', error);
+
+      const pcStatIds = [
+      'pc-cpu-temp',
+      'pc-cpu-usage',
+      'pc-gpu-temp',
+      'pc-gpu-usage',
+      'pc-vram-used',
+      'pc-vram-total'
+    ];
+
+    pcStatIds.forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
   }
 }
 
@@ -509,6 +609,7 @@ navButtons.forEach(button => {
     button.addEventListener('click', ()=> {
         const targetPage = button.dataset.page;
         
+        document.body.classList.add('page-systems');
         navButtons.forEach(btn => {
           btn.classList.remove('active');
         }); 
@@ -519,6 +620,7 @@ navButtons.forEach(button => {
         
         button.classList.add('active');
         document.getElementById(targetPage).classList.add('active');
+        document.body.className = 'page-' + targetPage;
       });
     });
 

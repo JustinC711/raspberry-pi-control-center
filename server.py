@@ -114,7 +114,8 @@ def get_pc_stats():
         "cpu_usage": sensors.get("/intelcpu/0/load/0"),
         "gpu_temp": sensors.get("/gpu-nvidia/0/temperature/0"),
         "gpu_usage": sensors.get("/gpu-nvidia/0/load/0"),
-        "vram_temp": sensors.get("/gpu-nvidia/0/temperature/3")
+        "vram_used": sensors.get("/gpu-nvidia/0/smalldata/1"),
+        "vram_total": sensors.get("/gpu-nvidia/0/smalldata/2")
     }
 
 network_previous = {}
@@ -237,6 +238,20 @@ class Handler(BaseHTTPRequestHandler):
              self.end_headers()
              with open("assets/backgrounds/home.png", "rb") as f:
                self.wfile.write(f.read())
+        elif self.path in (
+            "/assets/backgrounds/joshua-webb-GHHuZdfQoUo-unsplash.jpg",
+            "/assets/backgrounds/parrish-freeman-eC_Wd8SNAMY-unsplash.jpg",
+            "/assets/backgrounds/bernd-dittrich-nXTLdGdoItM-unsplash.jpg",
+        ):
+            filename = self.path.removeprefix("/")
+            with open(filename, "rb") as f:
+                image_data = f.read()
+
+            self.send_response(200)
+            self.send_header("Content-Type", "image/jpeg")
+            self.send_header("Content-Length", str(len(image_data)))
+            self.end_headers()
+            self.wfile.write(image_data)
         else:
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
