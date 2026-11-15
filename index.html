@@ -24,7 +24,7 @@ body {
   background-attachment: fixed;
 }
 
-/* Page-specific space backgrounds */
+/* Page backgrounds: Home, PC Controls, and Homelab */
 body.page-systems {
   background-image:
     linear-gradient(
@@ -58,12 +58,24 @@ body.page-homelab {
     url("assets/backgrounds/bernd-dittrich-nXTLdGdoItM-unsplash.jpg");
 }
 
+/* Typography: clock, date, headings, and body text */
 h1 {
   margin: 0 0 8px;
   font-size: 40px;
   font-weight: 500;
   letter-spacing: 1px;
   font-variant-numeric: tabular-nums;
+  color: #ffffff;
+  text-shadow: 0 2px 5px #000000, 0 0 18px #000000;
+}
+
+/* Page visibility: show only the selected view */
+#dashboard-date {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 5px #000000, 0 0 18px #000000;
 }
 
 h2 {
@@ -86,31 +98,50 @@ hr {
   background: #263449;
 }
 
+/* Top bar */
+.top-bar {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 280px;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.clock-group {
+  min-width: 0;
+}
+
 /* Navigation */
 .page-nav {
   display: flex;
+  justify-content: center;
   gap: 12px;
-  margin-top: 16px;
-  margin-bottom: 24px;
+  margin: 0;
 }
 
 .nav-btn {
   padding: 12px 20px;
-  border: 1px solid rgba(150, 190, 230, 0.3);
-  border-radius: 8px;
-  background: rgba(8, 15, 30, 0.65);
-  color: #d1deef;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color:#ffffff;
   font-size: 14px;
   letter-spacing: 2px;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
+  font-weight: 600;
+  text-shadow: 0 2px 5px #000000, 0 0 12px #000000;
 }
 
-.nav-btn:hover,
+.nav-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .nav-btn.active {
   color: #ffffff;
-  border-color: rgba(160, 200, 240, 0.6);
-  background: rgba(34, 54, 82, 0.85);
+  background: transparent;
+  box-shadow: inset 0 -2px 0 #a8d8f0,  0 3px 5px -2px rgba(0, 0, 0, 0.95);
 }
 
 .dashboard-page {
@@ -121,34 +152,52 @@ hr {
   display: block;
 }
 
-/* Home telemetry: two open rows */
+/* Home telemetry: Pi, Gaming PC, and Network */
 .system-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 28px;
-  width: min(1000px, calc(100% - 340px));
+  gap: 16px;
+  width: min(1400px, calc(100% - 340px));
   align-items: start;
 }
 
 .system-panel {
   min-width: 0;
-   width: min(100%, 700px);
-  background: linear-gradient(
-    to right,
-    rgba(3, 10, 22, 0.82),
-    rgba(3, 10, 22, 0.60) 75%,
-    transparent
-  );
+  width: min(100%, 1120px);
+  box-sizing: border-box;
+  padding: 12px 20px;
+  border: 1px solid rgba(190, 210, 230, 0.25);
+  border-radius: 10px;
+  background: rgba(5, 12, 24, 0.35);
 }
 
 .system-panel h2 {
-  margin: 0 0 18px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(150, 190, 230, 0.25);
+  margin: 0 0 12px;
+  padding-bottom: 0;
+  border-bottom: none;
   color: #e6edf7;
   font-size: 17px;
   font-weight: 500;
-  letter-spacing: 3px;
+  letter-spacing: 1.5px;
+}
+
+/* System headings above the readings */
+.pi-section h2,
+.pc-section h2,
+.network-section h2 {
+  margin: 0 0 8px;
+  padding-left: 20px;
+  color: #eef6ff;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 5px #000;
+}
+
+/* Wider Gaming PC panel */
+.gaming-pc-panel {
+  width: 100%;
+  background-color: rgba(5, 12, 24, 0.20);
 }
 
 /* Individual readings */
@@ -156,6 +205,16 @@ hr {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+}
+
+/* Four readings across the Raspberry Pi panel */
+.pi-section .stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Five readings across the Gaming PC panel */
+.pc-section .stats {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .stats p {
@@ -168,7 +227,7 @@ hr {
   box-shadow: none;
   color: #b6c5d9;
   font-size: 13px;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.75px;
   text-shadow: 0 2px 6px #020813;
 }
 
@@ -193,7 +252,7 @@ hr {
   letter-spacing: 0;
 }
 
-/* Home information column */
+/* Right-side widgets: Moon and Uptime */
 .home-side-info {
   position: fixed;
   right: 40px;
@@ -204,10 +263,11 @@ hr {
   gap: 16px;
 }
 
+/* Shared information cards: right-side widgets and Network */
 .info-block {
   padding: 16px 18px;
-  border: 1px solid rgba(150, 190, 230, 0.3);
-  border-radius: 8px;
+  border: 1px solid rgba(190, 210, 230, 0.25);
+  border-radius: 10px;
   background: rgba(5, 12, 24, 0.8);
 }
 
@@ -253,11 +313,28 @@ hr {
   gap: 8px;
 }
 
+/* Network panel: match the system boxes */
+.network-panel {
+  width: min(100%, 920px);
+  box-sizing: border-box;
+  padding: 12px 20px;
+  border: 1px solid rgba(190, 210, 230, 0.25);
+  border-radius: 10px;
+  background: rgba(5, 12, 24, 0.35);
+}
+
+/* Network monitoring status */
+#network-status {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
 /* Live network speeds */
 .network-speeds {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
   margin-top: 14px;
 }
 
@@ -274,21 +351,31 @@ hr {
 }
 
 .network-speeds strong {
-  font-size: 20px;
+  color: #d9edff;
+  font-size: 26px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 6px #020813;
   white-space: nowrap;
 }
+
 </style>
 </head>
-<body>
+<body class="page-systems">
 <canvas id="space-canvas"></canvas>
-<h1 id="dashboard-clock">--:--</h1>
-<p id="dashboard-date">---</p>
-<hr>
-<nav class="page-nav">
-  <button class="nav-btn active" data-page="systems">HOME</button>
-  <button class="nav-btn" data-page="controls">PC CONTROLS</button>
-  <button class="nav-btn" data-page="homelab">HOMELAB</button>
+
+<header class="top-bar">
+  <div class="clock-group">
+    <h1 id="dashboard-clock">--:--</h1>
+    <p id="dashboard-date">---</p>
+  </div>
+
+  <nav class="page-nav">
+    <button class="nav-btn active" data-page="systems">HOME</button>
+    <button class="nav-btn" data-page="controls">PC CONTROLS</button>
+    <button class="nav-btn" data-page="homelab">HOMELAB</button>
   </nav>
+</header>
   <section id="systems" class="dashboard-page active">
 <div class="system-grid">
 
@@ -307,78 +394,100 @@ hr {
     </div>
 </div>
 
-<div class="info-block">
-    <span class="info-label">NETWORK · PI 5</span>
-    <strong id="network-status">CONNECTING</strong>
-
-    <div class="network-speeds">
-        <div>
-            <span>↓ DOWNLOAD</span>
-            <strong id="network-download">-- Mbps</strong>
-        </div>
-
-        <div>
-            <span>↑ UPLOAD</span>
-            <strong id="network-upload">-- Mbps</strong>
-        </div>
-    </div>
-</div>
-
     <div class="info-block">
       <span class="info-label">UPTIME</span>
       <strong id="uptime">--</strong>
-      <span>System uptime</span>
+      <span>Since Pi restart</span>
     </div>
 
   </div>
 
-  <div class="system-panel">
-    <h2>SYSTEM OVERVIEW</h2>
+ <div class="pi-section">
+  <h2>RASPBERRY PI 5</h2>
 
-    <div class="stats">
-      <p>
-        CPU<br>
-        <strong id="cpu-temp">--</strong>
-        <span id="cpu-usage">--</span>
-      </p>
+  <div class="system-panel stats">
+    <p>
+      CPU<br>
+      <strong id="cpu-usage">--</strong>
+      <span>Processor usage</span>
+    </p>
 
-      <p>
-        MEMORY<br>
-        <strong id="ram-usage">--</strong>
-        <span id="ram-total">--</span>
-      </p>
+    <p>
+      MEMORY<br>
+      <strong id="ram-usage">--</strong>
+      <span id="ram-total">--</span>
+    </p>
 
-      <p>
-        STORAGE<br>
-        <strong id="storage-usage">--</strong>
-        <span id="storage-total">--</span>
-      </p>
+    <p>
+      STORAGE<br>
+      <strong id="storage-usage">--</strong>
+      <span id="storage-total">--</span>
+    </p>
+
+    <p>
+      TEMP<br>
+      <strong id="cpu-temp">--</strong>
+      <span>CPU temperature</span>
+    </p>
+  </div>
+</div>
+
+ <!-- Gaming PC readings -->
+<div class="pc-section">
+  <h2>GAMING PC</h2>
+
+  <div class="system-panel gaming-pc-panel stats">
+    <p>
+      CPU<br>
+      <strong id="pc-cpu-usage">--</strong>
+      <span>Processor usage</span>
+    </p>
+
+    <p>
+      GPU<br>
+      <strong id="pc-gpu-usage">--</strong>
+      <span>Graphics usage</span>
+    </p>
+
+    <p>
+      VRAM<br>
+      <strong id="pc-vram-used">--</strong>
+      <span id="pc-vram-total">--</span>
+    </p>
+
+    <p>
+      CPU TEMP<br>
+      <strong id="pc-cpu-temp">--</strong>
+      <span>CPU temperature</span>
+    </p>
+
+    <p>
+      GPU TEMP<br>
+      <strong id="pc-gpu-temp">--</strong>
+      <span>GPU temperature</span>
+    </p>
+  </div>
+</div>
+
+<div class="network-section">
+  <h2>NETWORK · PI 5</h2>
+
+  <div class="info-block network-panel">
+    <strong id="network-status">CONNECTING</strong>
+
+    <div class="network-speeds">
+      <div>
+        <span>↓ DOWNLOAD</span>
+        <strong id="network-download">-- Mbps</strong>
+      </div>
+
+      <div>
+        <span>↑ UPLOAD</span>
+        <strong id="network-upload">-- Mbps</strong>
+      </div>
     </div>
   </div>
-
-  <div class="system-panel">
-    <h2>GAMING PC</h2>
-
-    <div class="stats">
-      <p>
-        CPU<br>
-        <strong id="pc-cpu-temp">--</strong>
-        <span id="pc-cpu-usage">--</span>
-      </p>
-
-      <p>
-        GPU<br>
-        <strong id="pc-gpu-temp">--</strong>
-        <span id="pc-gpu-usage">--</span>
-      </p>
-
-      <p>
-        VRAM<br>
-        <strong id="pc-vram-used">--</strong>
-        <span id="pc-vram-total">--</span>
-      </p>
-    </div>
-  </div>
+</div>
 
 </div>
 
@@ -406,7 +515,7 @@ async function updateStats() {
             stats.cpu_temp.toFixed(1) + '\u00B0C';
 
         document.getElementById('cpu-usage').textContent =
-            stats.cpu_usage.toFixed(1) + '% usage';
+            stats.cpu_usage.toFixed(1) + '%';
 
         document.getElementById('ram-usage').textContent =
             stats.ram_usage.toFixed(1) + '%';
@@ -547,7 +656,7 @@ async function updatePCStats() {
       const number = parseFloat(value);
 
       return Number.isFinite(number)
-        ? `${number.toFixed(1)}% usage`
+        ? `${number.toFixed(1)}%`
         : '--';
     }
 
