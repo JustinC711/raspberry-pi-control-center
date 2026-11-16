@@ -8,14 +8,15 @@ import time
 import threading
 from skyfield.api import load
 from skyfield import almanac
-
-ts = load.timescale()
-planets = load("de421.bsp")
-
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent
+
+ts = load.timescale()
+planets = load(str(BASE_DIR / "de421.bsp"))
+
 def load_env():
-    env_path = Path(__file__).resolve().parent / ".env"
+    env_path = BASE_DIR / ".env"
 
     if not env_path.is_file():
         return
@@ -223,20 +224,20 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", "text/css")
             self.end_headers()
-            with open("stars.css", "rb") as f:
+            with open(BASE_DIR / "stars.css", "rb") as f:
                 self.wfile.write(f.read())
         elif self.path == "/space.js":
             self.send_response(200)
             self.send_header("Content-Type", "application/javascript")
             self.end_headers()
-            with open("space.js", "rb") as f:
+            with open(BASE_DIR / "space.js", "rb") as f:
                 self.wfile.write(f.read())
 
         elif self.path == "/assets/backgrounds/home.png":
              self.send_response(200)
              self.send_header("Content-Type", "image/png")
              self.end_headers()
-             with open("assets/backgrounds/home.png", "rb") as f:
+             with open(BASE_DIR / "assets/backgrounds/home.png", "rb") as f:
                self.wfile.write(f.read())
         elif self.path in (
             "/assets/backgrounds/joshua-webb-GHHuZdfQoUo-unsplash.jpg",
@@ -244,7 +245,7 @@ class Handler(BaseHTTPRequestHandler):
             "/assets/backgrounds/bernd-dittrich-nXTLdGdoItM-unsplash.jpg",
         ):
             filename = self.path.removeprefix("/")
-            with open(filename, "rb") as f:
+            with open(BASE_DIR / filename, "rb") as f:
                 image_data = f.read()
 
             self.send_response(200)
@@ -256,7 +257,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
-            with open("index.html", "rb") as f:
+            with open(BASE_DIR / "index.html", "rb") as f:
                 self.wfile.write(f.read())
 
 if __name__ == "__main__":
