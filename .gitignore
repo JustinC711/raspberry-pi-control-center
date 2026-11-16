@@ -22,3 +22,6 @@ de421.bsp
 *.bak
 server-network-draft.py
 assets/backgrounds/home-2.png
+
+# Local development archives
+archive/
