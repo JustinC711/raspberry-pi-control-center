@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="stars.css">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+/* Shared layout stacking */
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
 /* Page and background */
 body {
   margin: 0;
@@ -362,7 +367,6 @@ hr {
 </style>
 </head>
 <body class="page-systems">
-<canvas id="space-canvas"></canvas>
 
 <header class="top-bar">
   <div class="clock-group">
@@ -734,6 +738,5 @@ navButtons.forEach(button => {
     });
 
 </script>
-<script src="space.js"></script>
 </body>
 </html>														

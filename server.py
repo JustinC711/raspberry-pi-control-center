@@ -220,18 +220,6 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(stats).encode())
-        elif self.path == "/stars.css":
-            self.send_response(200)
-            self.send_header("Content-Type", "text/css")
-            self.end_headers()
-            with open(BASE_DIR / "stars.css", "rb") as f:
-                self.wfile.write(f.read())
-        elif self.path == "/space.js":
-            self.send_response(200)
-            self.send_header("Content-Type", "application/javascript")
-            self.end_headers()
-            with open(BASE_DIR / "space.js", "rb") as f:
-                self.wfile.write(f.read())
 
         elif self.path == "/assets/backgrounds/home.png":
              self.send_response(200)
